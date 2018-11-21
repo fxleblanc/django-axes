@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from axes.conf import settings
 from axes.models import AccessAttempt
+from axes.models import Settings
 from axes.utils import get_axes_cache, get_client_ip, get_client_username
 
 
@@ -207,13 +208,13 @@ def is_already_locked(request):
     failures_cached = get_axes_cache().get(cache_hash_key)
     if failures_cached is not None:
         return (
-            failures_cached >= settings.AXES_FAILURE_LIMIT and
+            failures_cached >= Settings.objects.first().failure_limit and
             settings.AXES_LOCK_OUT_AT_FAILURE
         )
     else:
         for attempt in get_user_attempts(request):
             if (
-                attempt.failures_since_start >= settings.AXES_FAILURE_LIMIT and
+                attempt.failures_since_start >= Settings.objects.first().failure_limit and
                 settings.AXES_LOCK_OUT_AT_FAILURE
             ):
                 return True

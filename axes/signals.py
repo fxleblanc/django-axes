@@ -17,7 +17,7 @@ from axes.attempts import get_user_attempts
 from axes.attempts import is_user_lockable
 from axes.attempts import ip_in_whitelist
 from axes.attempts import reset_user_attempts
-from axes.models import AccessLog, AccessAttempt
+from axes.models import AccessLog, AccessAttempt, Settings
 from axes.utils import get_client_str
 from axes.utils import query2str
 from axes.utils import get_axes_cache, get_client_ip, get_client_username
@@ -83,7 +83,7 @@ def log_user_login_failed(sender, credentials, request, **kwargs):  # pylint: di
                 'AXES: Repeated login failure by %s. Count = %d of %d',
                 get_client_str(username, ip_address, user_agent, path_info),
                 failures,
-                settings.AXES_FAILURE_LIMIT
+                Settings.objects.first().failure_limit
             )
     else:
         # Record failed attempt. Whether or not the IP address or user agent is
@@ -108,7 +108,7 @@ def log_user_login_failed(sender, credentials, request, **kwargs):  # pylint: di
     # no matter what, we want to lock them out if they're past the number of
     # attempts allowed, unless the user is set to notlockable
     if (
-        failures >= settings.AXES_FAILURE_LIMIT and
+        failures >= Settings.objects.first().failure_limit and
         settings.AXES_LOCK_OUT_AT_FAILURE and
         is_user_lockable(request)
     ):

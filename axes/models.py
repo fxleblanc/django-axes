@@ -90,3 +90,16 @@ class AccessLog(CommonAccess):
     class Meta(object):
         verbose_name = _('access log')
         verbose_name_plural = _('access logs')
+
+
+class Settings(models.Model):
+    failure_limit = models.PositiveIntegerField(
+        _('Maximum number of failed logins')
+    )
+
+    def __str__(self):
+        return 'Settings for the axes application'
+
+    class Meta(object):
+        verbose_name = _('settings')
+        verbose_name_plural = _('settings')

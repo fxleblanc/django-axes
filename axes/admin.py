@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from axes.models import AccessLog
 from axes.models import AccessAttempt
+from axes.models import Settings
 
 
 class AccessAttemptAdmin(admin.ModelAdmin):
@@ -113,3 +114,5 @@ class AccessLogAdmin(admin.ModelAdmin):
 
 
 admin.site.register(AccessLog, AccessLogAdmin)
+
+admin.site.register(Settings)

@@ -13,6 +13,7 @@ from axes import get_version
 from axes.conf import settings
 from axes.attempts import is_already_locked
 from axes.utils import iso8601, get_client_username, get_lockout_message
+from axes.models import Settings
 
 log = logging.getLogger(settings.AXES_LOGGER)
 if settings.AXES_VERBOSE:
@@ -49,7 +50,7 @@ def axes_form_invalid(func):
 
 def lockout_response(request):
     context = {
-        'failure_limit': settings.AXES_FAILURE_LIMIT,
+        'failure_limit': Settings.objects.first().failure_limit,
         'username': get_client_username(request) or ''
     }
 
