@@ -28,14 +28,3 @@ class AppConfig(apps.AppConfig):
 
         LoginView.dispatch = method_decorator(axes_dispatch)(LoginView.dispatch)
         LoginView.form_invalid = method_decorator(axes_form_invalid)(LoginView.form_invalid)
-
-        from axes.models import Settings
-        if Settings.objects.count() == 0:
-            # Delete all settings
-            stgs = Settings.objects.all()
-            stgs.delete()
-
-            # Create a settings row with values from the settings
-            Settings.objects.create(
-                failure_limit=settings.AXES_FAILURE_LIMIT
-            )
